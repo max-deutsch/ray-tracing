@@ -11,6 +11,7 @@
 
 #include "stdafx.h"
 #include "D3D12HelloTriangle.h"
+#include <stdexcept>
 
 D3D12HelloTriangle::D3D12HelloTriangle(UINT width, UINT height, std::wstring name) :
 	DXSample(width, height, name),
@@ -25,6 +26,7 @@ void D3D12HelloTriangle::OnInit()
 {
 	LoadPipeline();
 	LoadAssets();
+	CheckRaytracingSupport();
 }
 
 // Load the rendering pipeline dependencies.
@@ -337,4 +339,15 @@ void D3D12HelloTriangle::WaitForPreviousFrame()
 	}
 
 	m_frameIndex = m_swapChain->GetCurrentBackBufferIndex();
+}
+
+void D3D12HelloTriangle::CheckRaytracingSupport() {
+	D3D12_FEATURE_DATA_D3D12_OPTIONS5 options5 = {}; ThrowIfFailed(m_device->CheckFeatureSupport(D3D12_FEATURE_D3D12_OPTIONS5, &options5, sizeof(options5))); if (options5.RaytracingTier < D3D12_RAYTRACING_TIER_1_0) throw std::runtime_error("Raytracing not supported on device");
+}
+
+void D3D12HelloTriangle::OnKeyUp(UINT8 key) {
+	// Alternate between rasterization and raytracing using the spacebar
+	if (key == VK_SPACE) {
+		m_raster = !m_raster;
+	}
 }
