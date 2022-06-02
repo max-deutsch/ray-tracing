@@ -282,20 +282,21 @@ void GenerateMengerSponge(int32_t level, float probability, std::vector<Vertex>&
   auto previous = &cubes1;
   auto next = &cubes2;
 
-  for (int i = 0; i < level; i++)
-  {
-    for (Cube& c : *previous)
-    {
-      if (probability < 0.f)
-        c.split(*next);
-      else
-        c.splitProb(*next, 20.f / 27.f);
-    }
-    auto temp = previous;
-    previous = next;
-    next = temp;
-    next->clear();
-  }
+  //for (int i = 0; i < level; i++)
+  //{
+  //  for (Cube& c : *previous)
+  //  {
+  //    if (probability < 0.f)
+  //      c.split(*next);
+  //    else
+  //      c.splitProb(*next, 20.f / 27.f);
+  //  }
+  //  auto temp = previous;
+  //  previous = next;
+  //  next = temp;
+  //  next->clear();
+  //}
+  auto previous = &cubes1;
 
   outputVertices.reserve(24 * previous->size());
   outputIndices.reserve(24 * previous->size());
